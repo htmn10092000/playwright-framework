@@ -1,7 +1,12 @@
 import { Page } from "@playwright/test";
+import { CommonActions } from "../actions/commonActions";
 
 export abstract class BasePage {
-  constructor(protected readonly page: Page) {}
+  protected readonly actions: CommonActions;
+
+  constructor(protected readonly page: Page) {
+    this.actions = new CommonActions(page);
+  }
 
   async goto(path: string) {
     await this.page.goto(path, { waitUntil: 'networkidle' });
