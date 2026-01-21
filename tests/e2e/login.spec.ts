@@ -8,6 +8,9 @@ test.describe('Login to the system', () => {
         await loginPage.goto('/login');
         await loginPage.waitForPageReady();
         await loginPage.login(invalidUser.username,invalidUser.password);
-        await expect(page.locator('#output #name')).toHaveText('Invalid username or password!');
+        expect(await loginPage.getErrorMessage()).toEqual('Invalid username or password!');
     });
 })
+// Updates:
+// Create a common functions for handling multiple windows or tabs in the browser.
+// Add envs file for testing in different environments like dev, staging, production.
