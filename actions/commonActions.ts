@@ -1,32 +1,27 @@
-import { Page, expect, Response } from "@playwright/test";
+import { Page, expect, Response, Locator } from "@playwright/test";
 
 export class CommonActions {
   constructor(private readonly page: Page) {}
 
-  async click(selector: string) {
-    await this.page.locator(selector).click();
+  async click(locator: Locator) {
+    await locator.click();
   }
 
-  async fill(selector: string, value: string) {
-    await this.page.locator(selector).fill(value);
-  }
-
-  async clearAndType(selector: string, value: string) {
-    const locator = this.page.locator(selector);
-    await locator.fill("");
+  async clearAndType(locator: Locator, value: string) {
+    await locator.clear();
     await locator.fill(value);
   }
 
-  async pressEnter(selector: string) {
-    await this.page.locator(selector).press("Enter");
+  async pressEnter(locator: Locator) {
+    await locator.press("Enter");
   }
 
-  async waitForOverlayGone(overlaySelector: string) {
-    await this.page.waitForSelector(overlaySelector, { state: "hidden" });
+  async waitForHidden(locator: Locator) {
+    await expect(locator).toBeHidden();
   }
 
-  async waitForEnabled(selector: string) {
-    await expect(this.page.locator(selector)).toBeEnabled();
+  async waitForEnabled(locator: Locator) {
+    await expect(locator).toBeEnabled();
   }
 
   async waitForLabelVisible(text: string) {
@@ -35,15 +30,15 @@ export class CommonActions {
 
   async waitForApi(urlPart: string, status = 200): Promise<Response> {
     return await this.page.waitForResponse(
-      res => res.url().includes(urlPart) && res.status() === status
+      (res) => res.url().includes(urlPart) && res.status() === status
     );
   }
 
-  async isVisible(selector: string): Promise<boolean> {
-    return this.page.locator(selector).isVisible();
+  async isVisible(locator: Locator): Promise<boolean> {
+    return locator.isVisible();
   }
 
-  async getText(selector: string): Promise<string> {
-    return this.page.locator(selector).innerText();
+  async getText(locator: Locator): Promise<string> {
+    return locator.innerText();
   }
 }

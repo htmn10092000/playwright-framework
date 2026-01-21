@@ -16,8 +16,12 @@ export class LoginPage extends BasePage {
   }
 
   async login(username: string, password: string) {
-    await this.userNameTxt.fill(username);
-    await this.passWordTxt.fill(password);
-    await this.loginBtn.click();
+    await this.actions.clearAndType(this.userNameTxt, username);
+    await this.actions.clearAndType(this.passWordTxt, password);
+    await this.actions.click(this.loginBtn);
+  }
+
+  async getErrorMessage():Promise<string> {
+    return await this.actions.getText(this.page.locator('#output #name'));
   }
 }
